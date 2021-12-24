@@ -2,18 +2,19 @@ package Homework001_PresentBox;
 
 public class PresentBox implements BoxProperties {
     private Sweetness[] sweetnessArray;
+    private float currentWeight;
 
     public static void main(String[] args) {
         Sweetness[] sweetnessArray = new Sweetness[10];
         try {
             sweetnessArray = new Sweetness[]{
-                    new Chocolate("Щедрая душа", 5.5f, 3.9f, 35d),
-                    new Chocolate("Шоколадозаменитель", 10.9f, 0.1f, 1d),
+                    new Chocolate("Щедрая душа", 150.5f, 131.9f, 35d),
+                    new Chocolate("Шоколадозаменитель", 100.9f, 0.1f, 1d),
                     new Candy("Ириски", 0.2f, 100.1f, 3),
-                    new Candy("Мармеладные конфеты", 10f, 10.9f, 1),
-                    new Marshmallow("Зефир", 5f, 7f, 'A'),
+                    new Candy("Мармеладные конфеты", 110f, 104.9f, 1),
+                    new Marshmallow("Зефир", 155f, 70f, 'A'),
                     new Chocolate("Горький и не вкусный шоколад", 90.9f, 1000f, 1000d),
-                    new Marshmallow("Marshmallow", 3f, 10f, 'A'),
+                    new Marshmallow("Marshmallow", 123f, 100f, 'A'),
                     null,
                     null,
                     null
@@ -40,10 +41,6 @@ public class PresentBox implements BoxProperties {
         presentBox.removeLast();
         presentBox.getWeight();
         presentBox.getPrice();
-        presentBox.removeTheSmallestWeight();
-        presentBox.removeTheSmallestPrice();
-        presentBox.getWeight();
-        presentBox.getPrice();
 
         try {
             presentBox.add(new Marshmallow(null, 0.01f, 0.03f, 'z'));
@@ -65,6 +62,12 @@ public class PresentBox implements BoxProperties {
 
         presentBox.getInfoAboutAllObjects();
 
+        presentBox.optimizeByBoxWeight(500);
+        presentBox.optimizeByBoxPrice(170);
+
+        presentBox.getInfoAboutAllObjects();
+        presentBox.getWeight();
+        presentBox.getPrice();
     }
 
     public PresentBox(Sweetness[] sweetnessArray) {
@@ -112,7 +115,7 @@ public class PresentBox implements BoxProperties {
     }
 
     @Override
-    public void getWeight() {
+    public float getWeight() {
         float sum = 0;
         for (Sweetness sweetness : sweetnessArray) {
             if (sweetness != null) {
@@ -120,10 +123,11 @@ public class PresentBox implements BoxProperties {
             }
         }
         System.out.println("\nВывод значения веса содержимого коробки:\n\t"+sum+" условных единиц измерения массы");
+        return sum;
     }
 
     @Override
-    public void getPrice() {
+    public float getPrice() {
         float sum = 0;
         for (Sweetness sweetness : sweetnessArray) {
             if (sweetness != null) {
@@ -131,6 +135,7 @@ public class PresentBox implements BoxProperties {
             }
         }
         System.out.println("\nВывод значения стоимости содержимого коробки:\n\t"+sum+" условных денежных единиц");
+        return sum;
     }
 
     @Override
@@ -180,6 +185,30 @@ public class PresentBox implements BoxProperties {
             this.remove(theSmallestWeightIndex);
         } else {
             System.out.println("\tВаши ячейки в коробке со сладостями - пусты, либо коробка не имеет ячеек. Операция удаления сладости последней ячейки не выполнена");
+        }
+    }
+
+    @Override
+    public void optimizeByBoxWeight(float weight) {
+        System.out.println("\nОперация оптимизации коробки по весу до "+weight+" условных единиц измерения массы путём поочерёдного удаления сладости с наименьшим весом:");
+        if (weight < 0) System.out.println("\tОшибка ввода данных: была введена масса коробки меньше нуля");
+        else {
+            while (this.getWeight() > weight) {
+                removeTheSmallestWeight();
+            }
+            System.out.println("\tОперация по оптимизации коробки по весу - выполнена");
+        }
+    }
+
+    @Override
+    public void optimizeByBoxPrice(float price) {
+        System.out.println("\nОперация оптимизации коробки по цене до "+price+" условных денежных единиц путём поочерёдного удаления сладости с наименьшей ценой:");
+        if (price < 0) System.out.println("\tОшибка ввода данных: была введена цена коробки меньше нуля");
+        else {
+            while (this.getPrice() > price) {
+                removeTheSmallestPrice();
+            }
+            System.out.println("\tОперация по оптимизации коробки по цене - выполнена");
         }
     }
 }
