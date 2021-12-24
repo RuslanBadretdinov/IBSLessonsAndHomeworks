@@ -193,7 +193,7 @@ public class PresentBox implements BoxProperties {
         System.out.println("\nОперация оптимизации коробки по весу до "+weight+" условных единиц измерения массы путём поочерёдного удаления сладости с наименьшим весом:");
         if (weight < 0) System.out.println("\tОшибка ввода данных: была введена масса коробки меньше нуля");
         else {
-            while (this.getWeight() > weight) {
+            while (this.getWeight() >= weight) {
                 removeTheSmallestWeight();
             }
             System.out.println("\tОперация по оптимизации коробки по весу - выполнена");
@@ -205,7 +205,7 @@ public class PresentBox implements BoxProperties {
         System.out.println("\nОперация оптимизации коробки по цене до "+price+" условных денежных единиц путём поочерёдного удаления сладости с наименьшей ценой:");
         if (price < 0) System.out.println("\tОшибка ввода данных: была введена цена коробки меньше нуля");
         else {
-            while (this.getPrice() > price) {
+            while (this.getPrice() >= price) {
                 removeTheSmallestPrice();
             }
             System.out.println("\tОперация по оптимизации коробки по цене - выполнена");
