@@ -17,7 +17,7 @@ public class RandomWords {
     private List<Path> potentialPaths = new ArrayList<>();
     private final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args) {
         RandomWords randomWords = new RandomWords();
         try {
             if (randomWords.definePath()) {
