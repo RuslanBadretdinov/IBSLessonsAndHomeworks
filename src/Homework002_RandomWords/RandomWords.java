@@ -17,7 +17,7 @@ public class RandomWords {
     private List<Path> potentialPaths = new ArrayList<>();
     private final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException{
         RandomWords randomWords = new RandomWords();
         try {
             if (randomWords.definePath()) {
@@ -29,7 +29,7 @@ public class RandomWords {
             }
             randomWords.br.close();
         } catch (IOException e) {
-            e.getMessage();
+            e.printStackTrace();
         }
     }
 
@@ -109,7 +109,7 @@ public class RandomWords {
         }
         System.out.println("Было найдено более 10 абсолютных путей");
         neededFilePath = null;
-        throw new IOException("Было найдено более 10 абсолютных путей");
+        return false;
     }
 
     public boolean definePotentialPaths() throws IOException{
