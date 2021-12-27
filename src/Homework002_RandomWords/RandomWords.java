@@ -22,10 +22,11 @@ public class RandomWords {
         try {
             if (randomWords.definePath()) {
                 randomWords.readRandomWordsToMap(randomWords.neededFilePath);
-                randomWords.printAllWordsAlphabetSortDefault();
-                randomWords.getMostPopularWords();
-                randomWords.printAllWordsAlphabetSortDefaultToLowerCase();
-                randomWords.getMostPopularWordsToLowerCase();
+                randomWords.printAllWordsAlphabetSortDefault(randomWords.randomWords);
+                randomWords.getMostPopularWords(randomWords.randomWords);
+
+                randomWords.printAllWordsAlphabetSortDefault(randomWords.convertAllWordsAlphabetSortDefaultToLowerCase());
+                randomWords.getMostPopularWords(randomWords.convertAllWordsAlphabetSortDefaultToLowerCase());
             } else {
                 System.out.println("Путь определён не был. Программа завершилась. Если файл не был пересён в корень: " + randomWords.startDir.toString() + " , то его нужно перенести");
             }
@@ -56,16 +57,16 @@ public class RandomWords {
         }
     }
 
-    public void printAllWordsAlphabetSortDefault() {
+    public void printAllWordsAlphabetSortDefault(TreeMap<String, Integer> randomWords) {
         if (randomWords.isEmpty()) {
-            System.out.println("\nВ данном файле не было искомых слов");
+            System.out.println("\n\tВ данном файле не было искомых слов");
         } else {
-            System.out.println("\nВывод статистики слов из файла, отсортированных в алфавитном порядке:");
+            System.out.println("\n\tВывод статистики слов из файла, отсортированных в алфавитном порядке:");
             System.out.println(randomWords);
         }
     }
 
-    public void getMostPopularWords() {
+    public void getMostPopularWords(TreeMap<String, Integer> randomWords) {
         LinkedHashMap<String, Float> mostPopularWords = new LinkedHashMap<>();
         int maxCount = 0;
         if (!randomWords.isEmpty()) {
@@ -77,10 +78,10 @@ public class RandomWords {
                     mostPopularWords.put(entry.getKey(), maxCount*100f/randomWordsCount);
                 } else if (maxCount == entry.getValue()) mostPopularWords.put(entry.getKey(), maxCount*100f/randomWordsCount);
             }
-            System.out.println("\nВывод слов с максимальной частотой в процентах:");
+            System.out.println("\n\tВывод слов с максимальной частотой в процентах:");
             System.out.println(mostPopularWords);
         } else {
-            System.out.println("\nВ искомом файле отсутствуют слова");
+            System.out.println("\n\tВ искомом файле отсутствуют слова");
         }
     }
 
@@ -165,9 +166,18 @@ public class RandomWords {
         return Path.of(pathName);
     }
 
-    private void printAllWordsAlphabetSortDefaultToLowerCase() {
-    }
-
-    private void getMostPopularWordsToLowerCase() {
+    private TreeMap<String, Integer> convertAllWordsAlphabetSortDefaultToLowerCase() {
+        TreeMap<String, Integer> randomWordsToLowerCase = new TreeMap<>();
+        for (Map.Entry<String, Integer> entry : randomWords.entrySet()) {
+            if (randomWordsToLowerCase.containsKey(entry.getKey().toLowerCase(Locale.getDefault()))) {
+                randomWordsToLowerCase.put(entry.getKey().toLowerCase(), randomWordsToLowerCase.get(entry.getKey().toLowerCase())+entry.getValue());
+            } else {
+                randomWordsToLowerCase.put(entry.getKey().toLowerCase(), entry.getValue());
+            }
+        }
+        System.out.println("\n---------------------------------------------------------------------------------" +
+                "\nСледующая операция не будет учитывать регистр при подсчёте выборки \"toLowerCase\""+
+                "\n---------------------------------------------------------------------------------");
+        return randomWordsToLowerCase;
     }
 }
