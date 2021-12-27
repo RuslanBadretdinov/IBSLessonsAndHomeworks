@@ -24,6 +24,8 @@ public class RandomWords {
                 randomWords.readRandomWordsToMap(randomWords.neededFilePath);
                 randomWords.printAllWordsAlphabetSortDefault();
                 randomWords.getMostPopularWords();
+                randomWords.printAllWordsAlphabetSortDefaultToLowerCase();
+                randomWords.getMostPopularWordsToLowerCase();
             } else {
                 System.out.println("Путь определён не был. Программа завершилась. Если файл не был пересён в корень: " + randomWords.startDir.toString() + " , то его нужно перенести");
             }
@@ -36,7 +38,7 @@ public class RandomWords {
     public void readRandomWordsToMap(Path path) {
         try(BufferedReader br = new BufferedReader(new FileReader(path.toFile()))) {
             String line;
-            Pattern pattern = Pattern.compile("\\b[a-zA-Zа-яА-Я-]+\\b");
+            Pattern pattern = Pattern.compile("\\b[a-zA-Zа-яА-Я]+((-)?([a-zA-Zа-яА-Я]+))*\\b"); //учитывает слово: мать-и-мачеха, иван-да-марья и т.д наверное.
             Matcher matcher;
             while ( (line = br.readLine() ) != null) {
                 matcher = pattern.matcher(line);
@@ -161,5 +163,11 @@ public class RandomWords {
             throw new IOException("В адрес было введено пустое поле: \"\"");
         }
         return Path.of(pathName);
+    }
+
+    private void printAllWordsAlphabetSortDefaultToLowerCase() {
+    }
+
+    private void getMostPopularWordsToLowerCase() {
     }
 }
