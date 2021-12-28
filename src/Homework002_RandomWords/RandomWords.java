@@ -39,7 +39,7 @@ public class RandomWords {
     public void readRandomWordsToMap(Path path) {
         try(BufferedReader br = new BufferedReader(new FileReader(path.toFile()))) {
             String line;
-            Pattern pattern = Pattern.compile("\\b[a-zA-Zа-яА-Я]+((-)?([a-zA-Zа-яА-Я]+))*\\b"); //учитывает слово: мать-и-мачеха, иван-да-марья и т.д наверное.
+            Pattern pattern = Pattern.compile("\\b[a-zA-Zа-яА-Я0-9]+((-)?([a-zA-Zа-яА-Я0-9]+))*\\b"); //учитывает слово: мать-и-мачеха, иван-да-марья и т.д наверное.
             Matcher matcher;
             while ( (line = br.readLine() ) != null) {
                 matcher = pattern.matcher(line);
