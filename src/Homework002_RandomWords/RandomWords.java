@@ -10,7 +10,6 @@ import java.util.regex.Pattern;
 public class RandomWords {
     private TreeMap<String, Integer> randomWords = new TreeMap<>();
     private Integer randomWordsCount = 0;
-
     private static Iterable<Path> rootDirs = FileSystems.getDefault().getRootDirectories();
     private Path neededFilePath;
 
@@ -116,7 +115,6 @@ public class RandomWords {
     }
 
     public boolean definePotentialPaths() throws IOException{
-        System.out.println("Ведётся поиск файлов по относительному пути.");
         FileVisitor<Path> fileVisitor = new FileVisitor<>() {
             @Override
             public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
@@ -142,8 +140,18 @@ public class RandomWords {
                 return FileVisitResult.CONTINUE;
             }
         };
-        for (Path dir : rootDirs) {
-            Files.walkFileTree(dir, fileVisitor);
+        System.out.println("Поиск файлов по относительному пути.");
+        System.out.println("Введите абсолютный путь, относительно которого будет идти поиск\nПредлагается путь проекта: "+
+                this.getClass().getProtectionDomain().getCodeSource().getLocation());
+        Path absolutePath = readPath();
+        if (absolutePath.isAbsolute() && Files.exists(absolutePath)) {
+            System.out.println("Вы ввели путь, по которому будет вестись поиск:"+absolutePath.toString());
+            Files.walkFileTree(absolutePath, fileVisitor);
+        } else {
+            System.out.println("Введённый вами абсолютный путь для относительного пути не существует. Далее будет вестись поиск файла по директориям\n"+rootDirs);
+            for (Path dir : rootDirs) {
+                Files.walkFileTree(dir, fileVisitor);
+            }
         }
         return potentialPaths.size() > 0;
     }
@@ -176,9 +184,11 @@ public class RandomWords {
                 randomWordsToLowerCase.put(entry.getKey().toLowerCase(), entry.getValue());
             }
         }
-        System.out.println("\n---------------------------------------------------------------------------------" +
-                "\nСледующая операция не будет учитывать регистр при подсчёте выборки \"toLowerCase\""+
-                "\n---------------------------------------------------------------------------------");
+        System.out.println("""
+
+                ---------------------------------------------------------------------------------
+                Следующая операция не будет учитывать регистр при подсчёте выборки "toLowerCase"
+                ---------------------------------------------------------------------------------""");
         return randomWordsToLowerCase;
     }
 }
