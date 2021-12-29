@@ -144,9 +144,21 @@ public class RandomWords {
         System.out.println("Введите абсолютный путь, относительно которого будет идти поиск\nПредлагается путь проекта: "+
                 this.getClass().getProtectionDomain().getCodeSource().getLocation());
         Path absolutePath = readPath();
-        if (absolutePath.isAbsolute() && Files.exists(absolutePath)) {
-            System.out.println("Вы ввели путь, по которому будет вестись поиск:"+absolutePath.toString());
-            Files.walkFileTree(absolutePath, fileVisitor);
+        if (absolutePath.isAbsolute()) {
+            System.out.println("Вы ввели путь: "+absolutePath.toString()+", по которому будет вестись поиск");
+            Path path = absolutePath.resolve(neededFilePath);
+            if (Files.exists(path)) {
+                //Homework002_RandomWords\\Random_Words.txt
+                //G:\\Users\\qwerty\\IdeaProjects\\IBSLessonsAndHomeworks\\src\\
+                System.out.println("Операция по формированию пути была сформирована успешно");
+                neededFilePath = path;
+                potentialPaths.add(neededFilePath);
+            } else {
+                if (Files.isDirectory(absolutePath)) {
+                    System.out.println("Ведётся поиск файла в введённом директории");
+                    Files.walkFileTree(absolutePath, fileVisitor);
+                }
+            }
         } else {
             System.out.println("Введённый вами абсолютный путь для относительного пути не существует. Далее будет вестись поиск файла по директориям\n"+rootDirs);
             for (Path dir : rootDirs) {
