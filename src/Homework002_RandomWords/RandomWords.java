@@ -11,7 +11,7 @@ public class RandomWords {
     private TreeMap<String, Integer> randomWords = new TreeMap<>();
     private Integer randomWordsCount = 0;
 
-    private final Path startDir = Paths.get(System.getProperty("user.dir")).getRoot();
+    private static Iterable<Path> rootDirs = FileSystems.getDefault().getRootDirectories();
     private Path neededFilePath;
 
     private List<Path> potentialPaths = new ArrayList<>();
@@ -28,7 +28,7 @@ public class RandomWords {
                 randomWords.printAllWordsAlphabetSortDefault(randomWords.convertAllWordsAlphabetSortDefaultToLowerCase());
                 randomWords.getMostPopularWords(randomWords.convertAllWordsAlphabetSortDefaultToLowerCase());
             } else {
-                System.out.println("Путь определён не был. Программа завершилась. Если файл не был пересён в корень: " + randomWords.startDir.toString() + " , то его нужно перенести");
+                System.out.println("Путь определён не был. Программа завершилась.");
             }
             randomWords.br.close();
         } catch (IOException e) {
@@ -110,12 +110,13 @@ public class RandomWords {
                 }
             }
         }
-        System.out.println("Было найдено более 10 абсолютных путей");
+        System.out.println("Было найдено более 10 абсолютных путей, либо вы ввели не правильный абсолютный путь");
         neededFilePath = null;
         return false;
     }
 
     public boolean definePotentialPaths() throws IOException{
+        System.out.println("Ведётся поиск файлов по относительному пути.");
         FileVisitor<Path> fileVisitor = new FileVisitor<>() {
             @Override
             public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
@@ -141,7 +142,9 @@ public class RandomWords {
                 return FileVisitResult.CONTINUE;
             }
         };
-        Files.walkFileTree(startDir, fileVisitor);
+        for (Path dir : rootDirs) {
+            Files.walkFileTree(dir, fileVisitor);
+        }
         return potentialPaths.size() > 0;
     }
 
@@ -151,10 +154,8 @@ public class RandomWords {
             System.out.println("Был введён существующий путь к файлу");
             return true;
         }
-        System.out.println("Был введён относительный, либо несуществующий путь к файлу");
+        System.out.println("Был введён относительный, либо несуществующий путь к файлу.");
         return false;
-        //  src/Homework002_RandomWords/Random_Words.txt
-        //  G:\Users\qwerty\IdeaProjects\IBSLessonsAndHomeworks\src\Homework002_RandomWords\Random_Words.txt
     }
 
     public Path readPath() throws IOException{
