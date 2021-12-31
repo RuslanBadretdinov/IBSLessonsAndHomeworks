@@ -1,12 +1,9 @@
 package Homework003_Companies;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-
 import java.util.List;
 
-@JsonAutoDetect
 public class Company {
-    private long id;
+    private Integer id;
     private String name;
     private String address;
     private String phoneNumber;
@@ -14,24 +11,11 @@ public class Company {
     private String founded;
     private List<Share> securities;
 
-    public Company() {
-    }
-
-    public Company(long id, String name, String address, String phoneNumber, long inn, String founded, List<Share> securities) {
-        this.id = id;
-        this.name = name;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
-        this.inn = inn;
-        this.founded = founded;
-        this.securities = securities;
-    }
-
-    public long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -41,6 +25,14 @@ public class Company {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getPhoneNumber() {
@@ -73,13 +65,5 @@ public class Company {
 
     public void setSecurities(List<Share> securities) {
         this.securities = securities;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
     }
 }
