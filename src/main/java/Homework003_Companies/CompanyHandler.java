@@ -20,7 +20,8 @@ public class CompanyHandler {
         try {
             companyHandler = mapper.readValue(jsonFile, CompanyHandler.class);
             companyHandler.printCompaniesNameAndFounded();
-            companyHandler.printSharesLessToday();
+            //companyHandler.printSharesLessToday();
+            companyHandler.printSharesLessTodayUpgrade();
             companyHandler.printCompaniesByDate(args[0]);
             companyHandler.printSharesByCurrency(args[1]);
         } catch (Exception e) {
@@ -30,9 +31,8 @@ public class CompanyHandler {
     }
 
     public void printCompaniesNameAndFounded() {
-        System.out.println("Вывод списка: имя + дата основания:");
+        System.out.println("\n\nВывод списка: имя + дата основания:");
         this.companies.forEach((company -> System.out.println("\tКраткое название "+company.getName()+" - "+"Дата основания "+company.getFounded())));
-        System.out.println("\n");
     }
 
     public void printSharesLessToday() {
@@ -48,6 +48,25 @@ public class CompanyHandler {
         for(Company company : companies) sum += company.getSecurities().stream().filter(share-> LocalDate.parse(share.getDate(), dateTimeFormatter).isBefore(today)).count();
 
         System.out.println("\nОбщее количество просроченных ценных бумаг на текущий день:"+sum);
+    }
+
+    private void printSharesLessTodayUpgrade() {
+        System.out.println("\n\nВывод списка просроченных ценнных бумаг на текущий день:");
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("d.MM.yyyy");
+
+        System.out.println("Всего просроченных ценных бумаг: " +
+                companies.stream().filter(company -> company.getSecurities().stream().
+                        anyMatch(share -> LocalDate.parse(share.getDate(), dateTimeFormatter).isBefore(today))).
+                        peek(company -> {
+                            System.out.println("\tКомпания держатель = id "+company.getId()+"\t"+ company.getName()+":");
+                            company.getSecurities().stream().filter(share -> LocalDate.parse(share.getDate(), dateTimeFormatter).isBefore(today)).
+                                    forEach(share -> System.out.println("\t\tcode: "+share.getCode()+"\tdate: "+share.getDate()));
+                        }).
+                        map(company -> company.getSecurities().stream().filter(share -> LocalDate.parse(share.getDate(), dateTimeFormatter).isBefore(today)).
+                                count()).reduce(0L, Long::sum)
+        );
+
     }
 
     public void printCompaniesByDate(String date) {
